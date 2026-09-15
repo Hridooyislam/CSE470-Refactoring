@@ -122,9 +122,9 @@ button{font:inherit; color:inherit; cursor:pointer}
 
 /* ============================================================ sidebar */
 .sidebar{
-  position:sticky; top:56px; overflow-y:auto;
-  height:calc(100vh - 56px);                                    /* fallback first */
-  height:calc(100dvh - 56px);
+  position:sticky; top:var(--topbar-h, 56px); overflow-y:auto;
+  height:calc(100vh - var(--topbar-h, 56px));                                    /* fallback first */
+  height:calc(100dvh - var(--topbar-h, 56px));
   border-right:1px solid var(--line); background:var(--sunken);
   padding:16px 12px 40px; scrollbar-width:thin;
 }
@@ -338,12 +338,12 @@ svg.uml{display:block; margin:0 auto; max-width:100%; height:auto}
   .shell{grid-template-columns:1fr}
   .menubtn{display:block}
   .sidebar{
-    position:fixed; top:56px; left:0; width:min(320px,86vw); z-index:35;
+    position:fixed; top:var(--topbar-h, 56px); left:0; width:min(320px,86vw); z-index:35;
     transform:translateX(-102%); transition:transform .22s ease;
     box-shadow:0 0 40px rgba(0,0,0,.22);
   }
   body.nav-open .sidebar{transform:none}
-  body.nav-open::after{content:""; position:fixed; top:56px; right:0; bottom:0; left:0;
+  body.nav-open::after{content:""; position:fixed; top:var(--topbar-h, 56px); right:0; bottom:0; left:0;
                        z-index:30; background:rgba(0,0,0,.35)}
   main{padding:22px 18px 72px}
   h1{font-size:1.65rem}
@@ -520,17 +520,62 @@ table.roles td:nth-child(2), table.roles td:nth-child(3) { font-family: var(--mo
   box-shadow: 0 1px 3px rgba(0,0,0,0.15);
 }
 
+:root {
+  --topbar-h: 56px;
+}
+
+/* Base Topbar */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 56px;
+  padding: 0 16px;
+  padding-top: env(safe-area-inset-top, 0px);
+  background: var(--surface);
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  backdrop-filter: saturate(1.4) blur(10px);
+  border-bottom: 1px solid var(--line);
+  box-sizing: border-box;
+}
+
 @media (max-width: 900px) {
-  .mod-switch {
-    order: 3;
-    width: 100%;
-    justify-content: center;
-    margin: 6px 0 2px;
+  :root {
+    --topbar-h: 96px;
   }
   .topbar {
     flex-wrap: wrap;
     height: auto;
-    padding-bottom: 6px;
+    min-height: 88px;
+    padding: 10px 14px 8px;
+    padding-top: max(10px, env(safe-area-inset-top, 10px));
+    row-gap: 8px;
+    column-gap: 8px;
+  }
+  .mod-switch {
+    order: 3;
+    width: 100%;
+    display: flex;
+    justify-content: stretch;
+    margin: 0;
+    padding: 2px;
+    background: var(--surface-2);
+    border: 1px solid var(--line-2);
+    border-radius: 8px;
+    box-sizing: border-box;
+  }
+  .mod-tab {
+    flex: 1 1 0;
+    justify-content: center;
+    padding: 6px 4px;
+    font-size: 0.78rem;
+    white-space: nowrap;
+  }
+  main {
+    padding: 24px 18px 72px;
   }
 }
 
@@ -16492,6 +16537,19 @@ one registry? true</code></pre></div></div><h2 class="sec">Participants</h2><div
       }
     }
   });
+
+  
+  /* ---------------------------------------------------------- dynamic topbar height */
+  function updateTopbarHeight() {
+    var tb = document.querySelector('.topbar');
+    if (tb) {
+      document.documentElement.style.setProperty('--topbar-h', tb.offsetHeight + 'px');
+    }
+  }
+  window.addEventListener('resize', updateTopbarHeight);
+  window.addEventListener('orientationchange', updateTopbarHeight);
+  setTimeout(updateTopbarHeight, 50);
+  updateTopbarHeight();
 
   // Initial show based on hash
   show(hashTarget(), false);
