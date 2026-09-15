@@ -678,6 +678,106 @@ table.roles td:nth-child(2), table.roles td:nth-child(3) { font-family: var(--mo
   display: none !important;
 }
 
+
+/* Quick Navigation Responsive List */
+.quick-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 1.2rem 0 2.5rem;
+}
+.quick-nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px 18px;
+  box-shadow: var(--shadow);
+  transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+.quick-nav-item:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+}
+.qn-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  flex-grow: 1;
+}
+.qn-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.qn-title {
+  font-size: 1.02rem;
+  font-weight: 650;
+  color: var(--ink);
+}
+.qn-badge {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid var(--accent);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+.qn-desc {
+  font-size: 0.86rem;
+  color: var(--ink-2);
+  line-height: 1.45;
+}
+.qn-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 18px;
+  background: var(--surface-2);
+  color: var(--accent-2);
+  border: 1px solid var(--line-2);
+  border-radius: 8px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+.qn-action-btn:hover {
+  background: var(--accent);
+  color: #ffffff;
+  border-color: var(--accent);
+}
+
+@media (max-width: 640px) {
+  .quick-nav-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 14px 16px;
+  }
+  .qn-action-btn {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 16px;
+    font-size: 0.9rem;
+    background: var(--accent);
+    color: #ffffff;
+    border-color: var(--accent);
+  }
+}
+
 </style>
 </head>
 <body>
@@ -774,42 +874,61 @@ table.roles td:nth-child(2), table.roles td:nth-child(3) { font-family: var(--mo
 </div>
 
 <h2 class="sec">Quick Navigation</h2>
-<div class="tblwrap">
-<table class="score">
-<thead><tr><th>Topic</th><th>Problems / Smells</th><th>Languages</th><th>Access</th></tr></thead>
-<tbody>
-<tr>
-  <td><strong>Refactoring</strong></td>
-  <td>7 Code Smells + Regression Test + Refactored FeeSystem</td>
-  <td>Python &amp; Java</td>
-  <td><a href="#ref-home" data-goto="ref-home" class="chip">Open Refactoring</a></td>
-</tr>
-<tr>
-  <td><strong>Observer Pattern</strong></td>
-  <td>4 problems (Notice Board, Auction Room, Alert Hub, Flood Station)</td>
-  <td>Python &amp; Java</td>
-  <td><a href="#a1" data-goto="a1" class="chip">View Observer</a></td>
-</tr>
-<tr>
-  <td><strong>Singleton Pattern</strong></td>
-  <td>4 problems (Grade DB, Print Spooler, SMS Gateway, Currency Desk)</td>
-  <td>Python &amp; Java</td>
-  <td><a href="#a2" data-goto="a2" class="chip">View Singleton</a></td>
-</tr>
-<tr>
-  <td><strong>Adapter Pattern</strong></td>
-  <td>3 problems (Payment Vendors, Book Search, Card Reader)</td>
-  <td>Python &amp; Java</td>
-  <td><a href="#a3" data-goto="a3" class="chip">View Adapter</a></td>
-</tr>
-<tr>
-  <td><strong>Factory Method</strong></td>
-  <td>4 problems (Courier Branch, Result Portals, Upload Service, Tickets)</td>
-  <td>Python &amp; Java</td>
-  <td><a href="#a4" data-goto="a4" class="chip">View Factory</a></td>
-</tr>
-</tbody>
-</table>
+<div class="quick-nav-list">
+  <div class="quick-nav-item">
+    <div class="qn-info">
+      <div class="qn-title-row">
+        <span class="qn-title">🔄 Refactoring &amp; Code Smells</span>
+        <span class="qn-badge">Python &amp; Java</span>
+      </div>
+      <div class="qn-desc">7 Fowler Code Smells + Step-by-Step Baby Steps + Regression Test Contract</div>
+    </div>
+    <a href="#ref-home" data-goto="ref-home" class="qn-action-btn">Open Refactoring &rarr;</a>
+  </div>
+
+  <div class="quick-nav-item">
+    <div class="qn-info">
+      <div class="qn-title-row">
+        <span class="qn-title">👁️ Observer Pattern</span>
+        <span class="qn-badge">Python &amp; Java</span>
+      </div>
+      <div class="qn-desc">4 Practice Problems: Notice Board, Online Auction, Alert Hub &amp; Flood Warning</div>
+    </div>
+    <a href="#a1" data-goto="a1" class="qn-action-btn">View Observer &rarr;</a>
+  </div>
+
+  <div class="quick-nav-item">
+    <div class="qn-info">
+      <div class="qn-title-row">
+        <span class="qn-title">🔒 Singleton Pattern</span>
+        <span class="qn-badge">Python &amp; Java</span>
+      </div>
+      <div class="qn-desc">4 Practice Problems: Grade Database, Print Spooler, SMS Gateway &amp; Currency Desk</div>
+    </div>
+    <a href="#a2" data-goto="a2" class="qn-action-btn">View Singleton &rarr;</a>
+  </div>
+
+  <div class="quick-nav-item">
+    <div class="qn-info">
+      <div class="qn-title-row">
+        <span class="qn-title">🔌 Adapter Pattern</span>
+        <span class="qn-badge">Python &amp; Java</span>
+      </div>
+      <div class="qn-desc">3 Practice Problems: Payment Vendors, Book Search Back-ends &amp; Card Reader</div>
+    </div>
+    <a href="#a3" data-goto="a3" class="qn-action-btn">View Adapter &rarr;</a>
+  </div>
+
+  <div class="quick-nav-item">
+    <div class="qn-info">
+      <div class="qn-title-row">
+        <span class="qn-title">🏭 Factory Method Pattern</span>
+        <span class="qn-badge">Python &amp; Java</span>
+      </div>
+      <div class="qn-desc">4 Practice Problems: Courier Branch, Result Export, Upload Service &amp; Helpdesk Tickets</div>
+    </div>
+    <a href="#a4" data-goto="a4" class="qn-action-btn">View Factory &rarr;</a>
+  </div>
 </div>
 
 <h2 class="sec">Keyboard &amp; Touch Shortcuts</h2>
