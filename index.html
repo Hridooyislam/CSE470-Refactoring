@@ -929,6 +929,16 @@ table.roles td:nth-child(2), table.roles td:nth-child(3) { font-family: var(--mo
     </div>
     <a href="#a4" data-goto="a4" class="qn-action-btn">View Factory &rarr;</a>
   </div>
+  <div class="quick-nav-item">
+    <div class="qn-info">
+      <div class="qn-title-row">
+        <span class="qn-title">⚡ Combined Patterns (Set C)</span>
+        <span class="qn-badge" style="color: var(--java); background: var(--java-soft); border-color: var(--java-line);">Multi-Pattern Systems</span>
+      </div>
+      <div class="qn-desc">7 Advanced Problems: Singleton + Observer, Adapter + Observer, Adapter + Factory, etc.</div>
+    </div>
+    <a href="#c1" data-goto="c1" class="qn-action-btn">View Combined &rarr;</a>
+  </div>
 </div>
 
 <h2 class="sec">Keyboard &amp; Touch Shortcuts</h2>
@@ -5848,7 +5858,173 @@ javac -d /tmp/p FeeSystem.java         &amp;&amp; java -cp /tmp/p FeeSystem     
 javac -d /tmp/s FeeSystemSolution.java &amp;&amp; java -cp /tmp/s FeeSystemSolution  &gt; /tmp/d.txt
 
 md5sum /tmp/a.txt /tmp/b.txt /tmp/c.txt /tmp/d.txt   # four identical hashes</code></pre><aside class="note note-trap"><h4>Three changes the output does not show</h4><p><strong>Sorting is no longer in place.</strong> The original <code>sortFees</code> mutated the caller's list and returned it; <code>sorted_fees</code> / <code>FeeSorting.sortedFees</code> returns a new list and leaves the argument alone. No caller here depends on the mutation, so nothing printed changes — but a caller elsewhere would notice.</p><p><strong>A call disappeared.</strong> <code>v.payTuition(5000.0)</code> invoked an empty method body, so removing it removes nothing observable. Deleting a call is only safe when you have checked that the call does nothing, which is precisely what made it a refused bequest.</p><p><strong>An assertion was added.</strong> <code>AttendanceRange</code> now rejects <code>low &gt; high</code>. It passes for this data, and in Java it is not even evaluated unless you run with <code>-ea</code>.</p></aside><aside class="note note-key"><h4>Where the reference solution made a judgement call</h4><p><code>NonDegreeMemberPolicy</code> is one way to state the non-degree rules outside the hierarchy; its two methods currently ignore the <code>member</code> they receive. The alternative — a <code>Billable</code> interface that <code>RegularStudent</code> implements and <code>VisitingStudent</code> does not — pushes the same decision into the type system and is the better answer in a larger program. Either is worth full marks with the reasoning stated.</p><p>Similarly, <code>FeeCalculator.totalCourseFees(student)</code> survives as a one-line pass-through so that the second line of output still comes from the calculator. If you deleted it and called <code>student.total_course_fees()</code> from <code>main</code> instead, the output is identical and the design is arguably cleaner — say so and it counts.</p></aside><h2 class="sec">Marking summary</h2><ul><li><strong>Naming</strong> — no abbreviations, no single letters, method names name their result.</li><li><strong>Comments</strong> — no comment describes <em>what</em>; both <em>why</em> comments survive.</li><li><strong>Long method</strong> — nothing over about a dozen lines; the big conditional is decomposed into named predicates.</li><li><strong>Parameters</strong> — four or fewer on the fee entry point; no parameter the callee could derive itself.</li><li><strong>Feature envy</strong> — arithmetic lives with the data; <code>FeeReport</code> only formats.</li><li><strong>Duplication</strong> — one summation, one validation, one sort, one copy of each constant.</li><li><strong>Refused bequest</strong> — no empty bodies, no placeholder returns, <code>Member</code> holds identity only.</li><li><strong>Behaviour</strong> — <code>diff</code> against the original output is empty. A submission that fails this fails the exercise, however clean the code is.</li></ul></div></div></article>
-<article class="prob home wide" id="dp-home" hidden><div class="crumbs"><span class="tag">CSE470</span><span class="tag pat">Software Engineering</span></div><h1>Design Patterns — practice problems &amp; solutions</h1><p class="lede">Fifteen problems on Observer, Singleton, Adapter and Factory Method — eight that drill one pattern each, seven that make two patterns work together. Every solution comes with a UML class diagram, a reference implementation in <strong>both Python and Java</strong>, the real program output, the participant table, and the marking points.</p><h2 class="sec">The four patterns</h2><div class="cards"><div class="card"><h4>Observer</h4><p>Define a one-to-many dependency so that when one object changes state, all its dependents are notified automatically.</p><p style="margin-top:.5em">Removes the <em>coupling</em> fault: the subject stops knowing who is listening.</p><span class="who">Drilled in: <a href="#a1" data-goto="a1">The Section Notice Board</a>, <a href="#b1" data-goto="b1">The Online Auction Room</a>, <a href="#c1" data-goto="c1">Campus Alert Hub</a>, <a href="#c2" data-goto="c2">Flood Warning Station</a></span></div><div class="card"><h4>Singleton</h4><p>Ensure a class has only one instance, and provide a global point of access to it.</p><p style="margin-top:.5em">Removes the <em>scarcity / shared-state</em> fault: one sequence, one connection, one cache.</p><span class="who">Drilled in: <a href="#a2" data-goto="a2">One Grade Database</a>, <a href="#b2" data-goto="b2">One Print Spooler for the Lab</a>, <a href="#c1" data-goto="c1">Campus Alert Hub</a>, <a href="#c4" data-goto="c4">The Card Reader</a>, <a href="#c5" data-goto="c5">The Campus SMS Gateway</a>, <a href="#c6" data-goto="c6">The Currency Desk</a>, <a href="#c7" data-goto="c7">IT Helpdesk Tickets</a></span></div><div class="card"><h4>Adapter</h4><p>Convert the interface of a class into another interface clients expect.</p><p style="margin-top:.5em">Removes the <em>vocabulary</em> fault: the client stops speaking the vendor's language.</p><span class="who">Drilled in: <a href="#a3" data-goto="a3">Checkout with Two Payment Vendors</a>, <a href="#b3" data-goto="b3">Two Book Search Back-ends</a>, <a href="#c2" data-goto="c2">Flood Warning Station</a>, <a href="#c3" data-goto="c3">The Upload Service</a>, <a href="#c4" data-goto="c4">The Card Reader</a>, <a href="#c5" data-goto="c5">The Campus SMS Gateway</a>, <a href="#c6" data-goto="c6">The Currency Desk</a></span></div><div class="card"><h4>Factory Method</h4><p>Define an interface for creating an object, but let subclasses decide which class to instantiate.</p><p style="margin-top:.5em">Removes the <em>selection</em> fault: the shared routine stops deciding what to build.</p><span class="who">Drilled in: <a href="#a4" data-goto="a4">The Courier Branch</a>, <a href="#b4" data-goto="b4">The Result Export Portals</a>, <a href="#c3" data-goto="c3">The Upload Service</a>, <a href="#c7" data-goto="c7">IT Helpdesk Tickets</a></span></div></div><h2 class="sec">How to use this page</h2><p>Read the story, write your own solution, <em>then</em> reveal the reference one. The <strong>Reveal solution</strong> button on each problem — and the <strong>Solutions</strong> switch in the top bar — control that.</p><p>Every code block has <strong>Python</strong> and <strong>Java</strong> tabs. The two implementations are the same design, not the same code: wherever the languages genuinely disagree — <code>__new__</code> versus a private constructor, multiple inheritance versus one <code>extends</code>, tuples versus a small class — there is a <strong>Java notes</strong> panel in the solution explaining the difference. Those differences are worth as much class time as the patterns.</p><p>Because only one problem is on screen at a time, your browser's find-in-page cannot see the others. The filter box makes up for it: type three or more characters and it searches the <strong>full text of every problem</strong>, not just the titles — a vendor method name, a variable, or a phrase from any code sample will find the problem it belongs to.</p><p>Keyboard shortcuts: <code>/</code> to filter the list, <code>[</code> and <code>]</code> for the previous and next problem, <code>l</code> to flip the code language, <code>s</code> to toggle solutions. Printing gives you whatever is on screen — a clean problem sheet with solutions hidden, a solution key with them shown.</p><h2 class="sec">Reading the diagrams</h2><div class="umlwrap" style="padding:14px 18px"><svg class="uml uml-key" width="560" height="172" viewBox="0 0 560 172" role="img" aria-label="Diagram key"><path class="u-ln" d="M12.0,22.0 L121.0,22.0"/><polygon class="u-hollow" points="132.0,22.0 121.0,27.6 121.0,16.4"/><text class="u-key-t" x="148" y="26.0">Inheritance — a class extends a class</text><path class="u-ln u-dash" d="M12.0,54.0 L121.0,54.0"/><polygon class="u-hollow" points="132.0,54.0 121.0,59.6 121.0,48.4"/><text class="u-key-t" x="148" y="58.0">Realisation — a class implements an interface</text><path class="u-ln" d="M25.0,86.0 L132.0,86.0"/><polygon class="u-hollow" points="12.0,86.0 18.5,91.0 25.0,86.0 18.5,81.0"/><path class="u-ln" d="M122.9,90.1 L132.0,86.0 M122.9,81.9 L132.0,86.0"/><text class="u-key-t" x="148" y="90.0">Aggregation — “holds a”: the object adapter&#x27;s grip on its adaptee</text><path class="u-ln u-dash" d="M12.0,118.0 L132.0,118.0"/><path class="u-ln" d="M122.9,122.1 L132.0,118.0 M122.9,113.9 L132.0,118.0"/><text class="u-key-t" x="148" y="122.0">Dependency — “uses”: a client calling through an interface</text><path class="u-ln u-dash" d="M12.0,150.0 L132.0,150.0"/><path class="u-ln" d="M122.9,154.1 L132.0,150.0 M122.9,145.9 L132.0,150.0"/><text class="u-key-t" x="148" y="154.0">Instantiation — a creator producing a product</text></svg></div><p>Class boxes show the name, then the fields and methods that matter to the pattern — not the whole class. <em>Italic</em> names are abstract or interfaces; «singleton» marks a class that guards its own instance count.</p><h2 class="sec">All problems</h2><div class="tblwrap"><table class="index"><thead><tr><th>Problem</th><th>Set</th><th>Patterns</th><th>What it is about</th></tr></thead><tbody><tr><td><a href="#a1" data-goto="a1">The Section Notice Board</a></td><td>Set A</td><td>Observer</td><td>A course section must tell every enrolled student the moment a notice is posted.</td></tr><tr><td><a href="#a2" data-goto="a2">One Grade Database</a></td><td>Set A</td><td>Singleton</td><td>Every module opens its own connection, so nothing any module saves is visible to the others.</td></tr><tr><td><a href="#a3" data-goto="a3">Checkout with Two Payment Vendors</a></td><td>Set A</td><td>Adapter</td><td>Two vendor SDKs you cannot edit, neither of them speaking the interface checkout expects.</td></tr><tr><td><a href="#a4" data-goto="a4">The Courier Branch</a></td><td>Set A</td><td>Factory Method</td><td>One booking routine shared by every branch, stuck behind an if/elif chain.</td></tr><tr><td><a href="#b1" data-goto="b1">The Online Auction Room</a></td><td>Set B</td><td>Observer</td><td>Every bidder in the room must see the new price the instant it changes.</td></tr><tr><td><a href="#b2" data-goto="b2">One Print Spooler for the Lab</a></td><td>Set B</td><td>Singleton</td><td>Each lab PC builds its own spooler, so every machine has a private queue.</td></tr><tr><td><a href="#b3" data-goto="b3">Two Book Search Back-ends</a></td><td>Set B</td><td>Adapter</td><td>A nested dictionary and a semicolon-separated string, both pretending to be a list of titles.</td></tr><tr><td><a href="#b4" data-goto="b4">The Result Export Portals</a></td><td>Set B</td><td>Factory Method</td><td>One export routine, three portals, and an if/elif chain in the middle of it.</td></tr><tr><td><a href="#c1" data-goto="c1">Campus Alert Hub</a></td><td>Combined</td><td>Singleton + Observer</td><td>One hub for the whole campus, pushing alerts to devices that come and go.</td></tr><tr><td><a href="#c2" data-goto="c2">Flood Warning Station</a></td><td>Combined</td><td>Adapter + Observer</td><td>Field hardware that will never have an update() method, sitting in the observer list anyway.</td></tr><tr><td><a href="#c3" data-goto="c3">The Upload Service</a></td><td>Combined</td><td>Adapter + Factory Method</td><td>Three storage back-ends, one upload routine, and two faults living in the same method.</td></tr><tr><td><a href="#c4" data-goto="c4">The Card Reader</a></td><td>Combined</td><td>Singleton + Adapter</td><td>Opening the port twice throws. Three modules each open it for themselves.</td></tr><tr><td><a href="#c5" data-goto="c5">The Campus SMS Gateway</a></td><td>Combined</td><td>Singleton + Adapter</td><td>A second login does not throw — it silently revokes the first, and messages just vanish.</td></tr><tr><td><a href="#c6" data-goto="c6">The Currency Desk</a></td><td>Combined</td><td>Singleton + Adapter</td><td>Every call to the rate provider is paid — and every re-fetch quietly re-prices the run.</td></tr><tr><td><a href="#c7" data-goto="c7">IT Helpdesk Tickets</a></td><td>Combined</td><td>Singleton + Factory Method</td><td>Three desks, one unbroken sequence of tracking numbers, and one supervisor who sees them all.</td></tr></tbody></table></div></article>
+<article class="prob home wide" id="dp-home" hidden><div class="crumbs"><span class="tag">CSE470</span><span class="tag pat">Software Engineering</span></div><h1>Design Patterns — practice problems &amp; solutions</h1><p class="lede">Fifteen problems on Observer, Singleton, Adapter and Factory Method — eight that drill one pattern each, seven that make two patterns work together. Every solution comes with a UML class diagram, a reference implementation in <strong>both Python and Java</strong>, the real program output, the participant table, and the marking points.</p><h2 class="sec">The four patterns</h2><div class="cards"><div class="card"><h4>Observer</h4><p>Define a one-to-many dependency so that when one object changes state, all its dependents are notified automatically.</p><p style="margin-top:.5em">Removes the <em>coupling</em> fault: the subject stops knowing who is listening.</p><span class="who">Drilled in: <a href="#a1" data-goto="a1">The Section Notice Board</a>, <a href="#b1" data-goto="b1">The Online Auction Room</a>, <a href="#c1" data-goto="c1">Campus Alert Hub</a>, <a href="#c2" data-goto="c2">Flood Warning Station</a></span></div><div class="card"><h4>Singleton</h4><p>Ensure a class has only one instance, and provide a global point of access to it.</p><p style="margin-top:.5em">Removes the <em>scarcity / shared-state</em> fault: one sequence, one connection, one cache.</p><span class="who">Drilled in: <a href="#a2" data-goto="a2">One Grade Database</a>, <a href="#b2" data-goto="b2">One Print Spooler for the Lab</a>, <a href="#c1" data-goto="c1">Campus Alert Hub</a>, <a href="#c4" data-goto="c4">The Card Reader</a>, <a href="#c5" data-goto="c5">The Campus SMS Gateway</a>, <a href="#c6" data-goto="c6">The Currency Desk</a>, <a href="#c7" data-goto="c7">IT Helpdesk Tickets</a></span></div><div class="card"><h4>Adapter</h4><p>Convert the interface of a class into another interface clients expect.</p><p style="margin-top:.5em">Removes the <em>vocabulary</em> fault: the client stops speaking the vendor's language.</p><span class="who">Drilled in: <a href="#a3" data-goto="a3">Checkout with Two Payment Vendors</a>, <a href="#b3" data-goto="b3">Two Book Search Back-ends</a>, <a href="#c2" data-goto="c2">Flood Warning Station</a>, <a href="#c3" data-goto="c3">The Upload Service</a>, <a href="#c4" data-goto="c4">The Card Reader</a>, <a href="#c5" data-goto="c5">The Campus SMS Gateway</a>, <a href="#c6" data-goto="c6">The Currency Desk</a></span></div><div class="card"><h4>Factory Method</h4><p>Define an interface for creating an object, but let subclasses decide which class to instantiate.</p><p style="margin-top:.5em">Removes the <em>selection</em> fault: the shared routine stops deciding what to build.</p><span class="who">Drilled in: <a href="#a4" data-goto="a4">The Courier Branch</a>, <a href="#b4" data-goto="b4">The Result Export Portals</a>, <a href="#c3" data-goto="c3">The Upload Service</a>, <a href="#c7" data-goto="c7">IT Helpdesk Tickets</a></span></div></div><h2 class="sec">How to use this page</h2><p>Read the story, write your own solution, <em>then</em> reveal the reference one. The <strong>Reveal solution</strong> button on each problem — and the <strong>Solutions</strong> switch in the top bar — control that.</p><p>Every code block has <strong>Python</strong> and <strong>Java</strong> tabs. The two implementations are the same design, not the same code: wherever the languages genuinely disagree — <code>__new__</code> versus a private constructor, multiple inheritance versus one <code>extends</code>, tuples versus a small class — there is a <strong>Java notes</strong> panel in the solution explaining the difference. Those differences are worth as much class time as the patterns.</p><p>Because only one problem is on screen at a time, your browser's find-in-page cannot see the others. The filter box makes up for it: type three or more characters and it searches the <strong>full text of every problem</strong>, not just the titles — a vendor method name, a variable, or a phrase from any code sample will find the problem it belongs to.</p><p>Keyboard shortcuts: <code>/</code> to filter the list, <code>[</code> and <code>]</code> for the previous and next problem, <code>l</code> to flip the code language, <code>s</code> to toggle solutions. Printing gives you whatever is on screen — a clean problem sheet with solutions hidden, a solution key with them shown.</p><h2 class="sec">Reading the diagrams</h2><div class="umlwrap" style="padding:14px 18px"><svg class="uml uml-key" width="560" height="172" viewBox="0 0 560 172" role="img" aria-label="Diagram key"><path class="u-ln" d="M12.0,22.0 L121.0,22.0"/><polygon class="u-hollow" points="132.0,22.0 121.0,27.6 121.0,16.4"/><text class="u-key-t" x="148" y="26.0">Inheritance — a class extends a class</text><path class="u-ln u-dash" d="M12.0,54.0 L121.0,54.0"/><polygon class="u-hollow" points="132.0,54.0 121.0,59.6 121.0,48.4"/><text class="u-key-t" x="148" y="58.0">Realisation — a class implements an interface</text><path class="u-ln" d="M25.0,86.0 L132.0,86.0"/><polygon class="u-hollow" points="12.0,86.0 18.5,91.0 25.0,86.0 18.5,81.0"/><path class="u-ln" d="M122.9,90.1 L132.0,86.0 M122.9,81.9 L132.0,86.0"/><text class="u-key-t" x="148" y="90.0">Aggregation — “holds a”: the object adapter&#x27;s grip on its adaptee</text><path class="u-ln u-dash" d="M12.0,118.0 L132.0,118.0"/><path class="u-ln" d="M122.9,122.1 L132.0,118.0 M122.9,113.9 L132.0,118.0"/><text class="u-key-t" x="148" y="122.0">Dependency — “uses”: a client calling through an interface</text><path class="u-ln u-dash" d="M12.0,150.0 L132.0,150.0"/><path class="u-ln" d="M122.9,154.1 L132.0,150.0 M122.9,145.9 L132.0,150.0"/><text class="u-key-t" x="148" y="154.0">Instantiation — a creator producing a product</text></svg></div><p>Class boxes show the name, then the fields and methods that matter to the pattern — not the whole class. <em>Italic</em> names are abstract or interfaces; «singleton» marks a class that guards its own instance count.</p><h2 class="sec">All problems</h2><div class="quick-nav-list">
+  <div class="quick-nav-item">
+    <div class="qn-info">
+      <div class="qn-title-row">
+        <span class="qn-title">A1 · The Section Notice Board</span>
+        <span class="qn-badge" style="color: var(--accent); background: var(--accent-soft); border-color: var(--accent);">Observer</span>
+        <span class="tag" style="margin-left:auto; font-size:0.7rem; padding:2px 6px;">Set A</span>
+      </div>
+      <div class="qn-desc">A course section must tell every enrolled student the moment a notice is posted.</div>
+    </div>
+    <a href="#a1" data-goto="a1" class="qn-action-btn">View Problem &rarr;</a>
+  </div>
+  <div class="quick-nav-item">
+    <div class="qn-info">
+      <div class="qn-title-row">
+        <span class="qn-title">A2 · One Grade Database</span>
+        <span class="qn-badge" style="color: var(--t-fn); background: var(--surface-2); border-color: var(--t-fn);">Singleton</span>
+        <span class="tag" style="margin-left:auto; font-size:0.7rem; padding:2px 6px;">Set A</span>
+      </div>
+      <div class="qn-desc">Every module opens its own connection, so nothing any module saves is visible to the others.</div>
+    </div>
+    <a href="#a2" data-goto="a2" class="qn-action-btn">View Problem &rarr;</a>
+  </div>
+  <div class="quick-nav-item">
+    <div class="qn-info">
+      <div class="qn-title-row">
+        <span class="qn-title">A3 · Checkout with Two Payment Vendors</span>
+        <span class="qn-badge" style="color: var(--warn); background: var(--warn-soft); border-color: var(--warn-line);">Adapter</span>
+        <span class="tag" style="margin-left:auto; font-size:0.7rem; padding:2px 6px;">Set A</span>
+      </div>
+      <div class="qn-desc">Two vendor SDKs you cannot edit, neither of them speaking the interface checkout expects.</div>
+    </div>
+    <a href="#a3" data-goto="a3" class="qn-action-btn">View Problem &rarr;</a>
+  </div>
+  <div class="quick-nav-item">
+    <div class="qn-info">
+      <div class="qn-title-row">
+        <span class="qn-title">A4 · The Courier Branch</span>
+        <span class="qn-badge" style="color: var(--good); background: var(--good-soft); border-color: var(--good);">Factory Method</span>
+        <span class="tag" style="margin-left:auto; font-size:0.7rem; padding:2px 6px;">Set A</span>
+      </div>
+      <div class="qn-desc">One booking routine shared by every branch, stuck behind an if/elif chain.</div>
+    </div>
+    <a href="#a4" data-goto="a4" class="qn-action-btn">View Problem &rarr;</a>
+  </div>
+  <div class="quick-nav-item">
+    <div class="qn-info">
+      <div class="qn-title-row">
+        <span class="qn-title">B1 · The Online Auction Room</span>
+        <span class="qn-badge" style="color: var(--accent); background: var(--accent-soft); border-color: var(--accent);">Observer</span>
+        <span class="tag" style="margin-left:auto; font-size:0.7rem; padding:2px 6px;">Set B</span>
+      </div>
+      <div class="qn-desc">Every bidder in the room must see the new price the instant it changes.</div>
+    </div>
+    <a href="#b1" data-goto="b1" class="qn-action-btn">View Problem &rarr;</a>
+  </div>
+  <div class="quick-nav-item">
+    <div class="qn-info">
+      <div class="qn-title-row">
+        <span class="qn-title">B2 · One Print Spooler for the Lab</span>
+        <span class="qn-badge" style="color: var(--t-fn); background: var(--surface-2); border-color: var(--t-fn);">Singleton</span>
+        <span class="tag" style="margin-left:auto; font-size:0.7rem; padding:2px 6px;">Set B</span>
+      </div>
+      <div class="qn-desc">Each lab PC builds its own spooler, so every machine has a private queue.</div>
+    </div>
+    <a href="#b2" data-goto="b2" class="qn-action-btn">View Problem &rarr;</a>
+  </div>
+  <div class="quick-nav-item">
+    <div class="qn-info">
+      <div class="qn-title-row">
+        <span class="qn-title">B3 · Two Book Search Back-ends</span>
+        <span class="qn-badge" style="color: var(--warn); background: var(--warn-soft); border-color: var(--warn-line);">Adapter</span>
+        <span class="tag" style="margin-left:auto; font-size:0.7rem; padding:2px 6px;">Set B</span>
+      </div>
+      <div class="qn-desc">A nested dictionary and a semicolon-separated string, both pretending to be a list of titles.</div>
+    </div>
+    <a href="#b3" data-goto="b3" class="qn-action-btn">View Problem &rarr;</a>
+  </div>
+  <div class="quick-nav-item">
+    <div class="qn-info">
+      <div class="qn-title-row">
+        <span class="qn-title">B4 · The Result Export Portals</span>
+        <span class="qn-badge" style="color: var(--good); background: var(--good-soft); border-color: var(--good);">Factory Method</span>
+        <span class="tag" style="margin-left:auto; font-size:0.7rem; padding:2px 6px;">Set B</span>
+      </div>
+      <div class="qn-desc">One export routine, three portals, and an if/elif chain in the middle of it.</div>
+    </div>
+    <a href="#b4" data-goto="b4" class="qn-action-btn">View Problem &rarr;</a>
+  </div>
+  <div class="quick-nav-item">
+    <div class="qn-info">
+      <div class="qn-title-row">
+        <span class="qn-title">C1 · Campus Alert Hub</span>
+        <span class="qn-badge" style="color: var(--java); background: var(--java-soft); border-color: var(--java-line);">Singleton + Observer</span>
+        <span class="tag" style="margin-left:auto; font-size:0.7rem; padding:2px 6px;">Combined</span>
+      </div>
+      <div class="qn-desc">One hub for the whole campus, pushing alerts to devices that come and go.</div>
+    </div>
+    <a href="#c1" data-goto="c1" class="qn-action-btn">View Problem &rarr;</a>
+  </div>
+  <div class="quick-nav-item">
+    <div class="qn-info">
+      <div class="qn-title-row">
+        <span class="qn-title">C2 · Flood Warning Station</span>
+        <span class="qn-badge" style="color: var(--java); background: var(--java-soft); border-color: var(--java-line);">Adapter + Observer</span>
+        <span class="tag" style="margin-left:auto; font-size:0.7rem; padding:2px 6px;">Combined</span>
+      </div>
+      <div class="qn-desc">Field hardware that will never have an update() method, sitting in the observer list anyway.</div>
+    </div>
+    <a href="#c2" data-goto="c2" class="qn-action-btn">View Problem &rarr;</a>
+  </div>
+  <div class="quick-nav-item">
+    <div class="qn-info">
+      <div class="qn-title-row">
+        <span class="qn-title">C3 · The Upload Service</span>
+        <span class="qn-badge" style="color: var(--java); background: var(--java-soft); border-color: var(--java-line);">Adapter + Factory Method</span>
+        <span class="tag" style="margin-left:auto; font-size:0.7rem; padding:2px 6px;">Combined</span>
+      </div>
+      <div class="qn-desc">Three storage back-ends, one upload routine, and two faults living in the same method.</div>
+    </div>
+    <a href="#c3" data-goto="c3" class="qn-action-btn">View Problem &rarr;</a>
+  </div>
+  <div class="quick-nav-item">
+    <div class="qn-info">
+      <div class="qn-title-row">
+        <span class="qn-title">C4 · The Card Reader</span>
+        <span class="qn-badge" style="color: var(--java); background: var(--java-soft); border-color: var(--java-line);">Singleton + Adapter</span>
+        <span class="tag" style="margin-left:auto; font-size:0.7rem; padding:2px 6px;">Combined</span>
+      </div>
+      <div class="qn-desc">Opening the port twice throws. Three modules each open it for themselves.</div>
+    </div>
+    <a href="#c4" data-goto="c4" class="qn-action-btn">View Problem &rarr;</a>
+  </div>
+  <div class="quick-nav-item">
+    <div class="qn-info">
+      <div class="qn-title-row">
+        <span class="qn-title">C5 · The Campus SMS Gateway</span>
+        <span class="qn-badge" style="color: var(--java); background: var(--java-soft); border-color: var(--java-line);">Singleton + Adapter</span>
+        <span class="tag" style="margin-left:auto; font-size:0.7rem; padding:2px 6px;">Combined</span>
+      </div>
+      <div class="qn-desc">A second login does not throw — it silently revokes the first, and messages just vanish.</div>
+    </div>
+    <a href="#c5" data-goto="c5" class="qn-action-btn">View Problem &rarr;</a>
+  </div>
+  <div class="quick-nav-item">
+    <div class="qn-info">
+      <div class="qn-title-row">
+        <span class="qn-title">C6 · The Currency Desk</span>
+        <span class="qn-badge" style="color: var(--java); background: var(--java-soft); border-color: var(--java-line);">Singleton + Adapter</span>
+        <span class="tag" style="margin-left:auto; font-size:0.7rem; padding:2px 6px;">Combined</span>
+      </div>
+      <div class="qn-desc">Every call to the rate provider is paid — and every re-fetch quietly re-prices the run.</div>
+    </div>
+    <a href="#c6" data-goto="c6" class="qn-action-btn">View Problem &rarr;</a>
+  </div>
+  <div class="quick-nav-item">
+    <div class="qn-info">
+      <div class="qn-title-row">
+        <span class="qn-title">C7 · IT Helpdesk Tickets</span>
+        <span class="qn-badge" style="color: var(--java); background: var(--java-soft); border-color: var(--java-line);">Singleton + Factory Method</span>
+        <span class="tag" style="margin-left:auto; font-size:0.7rem; padding:2px 6px;">Combined</span>
+      </div>
+      <div class="qn-desc">Three desks, one unbroken sequence of tracking numbers, and one supervisor who sees them all.</div>
+    </div>
+    <a href="#c7" data-goto="c7" class="qn-action-btn">View Problem &rarr;</a>
+  </div>
+</div></article>
 <article class="prob wide" id="skeletons" hidden><div class="crumbs"><span class="tag">Start here</span><span class="tag pat">Reference</span></div><h1>Pattern skeletons</h1><p class="kicker">The shape every solution in this pack is an instance of — one runnable skeleton per pattern, and a map from all fifteen problems onto it.</p><p>Each skeleton below is a <strong>complete program</strong>. Copy it, run it, and watch what it prints. Then open any problem and read its solution as this skeleton with the roles renamed — the class names change, the shape does not.</p><p>That is the point of the tables at the end of each section: they say exactly which class in each problem plays which role. If a solution ever seems to put a method somewhere unexpected, check it against the rules list — the rules hold in every one of the fifteen.</p><h2 class="sec">Observer</h2><aside class="note note-key"><h4>Intent</h4><p>Define a one-to-many dependency so that when one object changes state, all its dependents are notified automatically.</p></aside><p>Four classes, always in this order. <code>Observer</code> is the interface the subject calls back through. <code>Subject</code> is a <strong>concrete</strong> base class that owns the list and the three list operations — you write it once and never change it. <code>ConcreteSubject</code> extends it, holds the real state, and calls <code>notify()</code> at the end of every state-changing operation. The concrete observers implement <code>update</code> and read the state back out through the subject's getters.</p><div class="tblwrap"><table class="roles"><thead><tr><th>Role</th><th>What it does</th><th>Notes</th></tr></thead><tbody><tr><td><code>Observer</code></td><td>The callback interface. One abstract method, <code>update(subject)</code>.</td><td>Nothing else ever goes here.</td></tr><tr><td><code>Subject</code></td><td>Owns <code>_observers</code>, <code>attach</code>, <code>detach</code>, <code>notify</code>. Identical in every problem.</td><td>Note <code>__init__</code> lives <strong>here</strong>, not in the child.</td></tr><tr><td><code>ConcreteSubject</code></td><td>Extends <code>Subject</code>. Holds the state, and calls <code>self.notify()</code> at the end of each state change.</td><td>Must call <code>super().__init__()</code>.</td></tr><tr><td>Concrete Observers</td><td>Implement <code>update(subject)</code> and read state through the subject's getters.</td><td>They never read each other.</td></tr></tbody></table></div><div class="codeblock"><div class="cbhead"><span class="cbtitle">Observer — the skeleton</span><span class="seg"><button data-langbtn="python">Python</button><button data-langbtn="java">Java</button></span><button class="copy" type="button">Copy</button></div><div class="pane" data-lang="python"><div class="code"><pre class="ln" aria-hidden="true">1
 2
 3
